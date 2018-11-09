@@ -3,6 +3,7 @@ package ru.sbt.mipt.oop;
 import java.util.Collection;
 
 public class Room {
+
     private Collection<Light> lights;
     private Collection<Door> doors;
     private String name;
@@ -26,6 +27,7 @@ public class Room {
     }
 
     public Light getLightById(String objectId) {
+
         return null;
     }
 }

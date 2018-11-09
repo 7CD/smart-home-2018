@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static ru.sbt.mipt.oop.SensorEventType.*;
-
 public class Application {
 
     private static SmartHomeLoader smartHomeLoader = new FileSmartHomeLoader();
@@ -20,14 +18,15 @@ public class Application {
     }
 
     private static void runEventsCycle(SmartHome smartHome) {
-        SensorEvent event = RandomSensorEventProvider.getNextSensorEvent();
+        RandomSensorEventProvider sensorEventProvider = new RandomSensorEventProvider(smartHome);
+        SensorEvent event = sensorEventProvider.getNextSensorEvent();
         Collection<EventProcessor> eventProcessors = configureEventProcessors();
         while (event != null) {
             System.out.println("Got event: " + event);
             for (EventProcessor eventProcessor : eventProcessors) {
                 eventProcessor.processEvent(smartHome, event);
             }
-            event = RandomSensorEventProvider.getNextSensorEvent();
+            event = sensorEventProvider.getNextSensorEvent();
         }
     }
 
@@ -38,5 +37,4 @@ public class Application {
         eventProcessors.add(new HallDoorEventProcessor());
         return eventProcessors;
     }
-
 }
