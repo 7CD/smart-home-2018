@@ -1,40 +1,23 @@
 package ru.sbt.mipt.oop;
 
+import ru.sbt.mipt.oop.events.eventprocessor.DoorEventProcessor;
+import ru.sbt.mipt.oop.events.eventprocessor.HallDoorEventProcessor;
+import ru.sbt.mipt.oop.events.eventprocessor.LightsEventProcessor;
+import ru.sbt.mipt.oop.homeelement.SmartHome;
+import ru.sbt.mipt.oop.homeloader.FileSmartHomeLoader;
+import ru.sbt.mipt.oop.homeloader.SmartHomeLoader;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class Application {
 
-    private static SmartHomeLoader smartHomeLoader = new FileSmartHomeLoader();
-
-    public static void setSmartHomeLoader(SmartHomeLoader smartHomeLoader) {
-        Application.smartHomeLoader = smartHomeLoader;
-    }
-
     public static void main(String... args) throws IOException {
+        SmartHomeLoader smartHomeLoader = new FileSmartHomeLoader("smart-home-1.js");
         SmartHome smartHome = smartHomeLoader.loadSmartHome();
-        runEventsCycle(smartHome);
-    }
-
-    private static void runEventsCycle(SmartHome smartHome) {
-        RandomSensorEventProvider sensorEventProvider = new RandomSensorEventProvider(smartHome);
-        SensorEvent event = sensorEventProvider.getNextSensorEvent();
-        Collection<EventProcessor> eventProcessors = configureEventProcessors();
-        while (event != null) {
-            System.out.println("Got event: " + event);
-            for (EventProcessor eventProcessor : eventProcessors) {
-                eventProcessor.processEvent(smartHome, event);
-            }
-            event = sensorEventProvider.getNextSensorEvent();
-        }
-    }
-
-    private static Collection<EventProcessor> configureEventProcessors() {
-        Collection<EventProcessor> eventProcessors = new ArrayList<>();
-        eventProcessors.add(new LightsEventProcessor());
-        eventProcessors.add(new DoorEventProcessor());
-        eventProcessors.add(new HallDoorEventProcessor());
-        return eventProcessors;
+        HomeEventsObserver homeEventsObserver = new HomeEventsObserver(smartHome);
+        homeEventsObserver.registerEventProcessor(new LightsEventProcessor());
+        homeEventsObserver.registerEventProcessor(new DoorEventProcessor());
+        homeEventsObserver.registerEventProcessor(new HallDoorEventProcessor());
+        homeEventsObserver.runEventsCycle();
     }
 }

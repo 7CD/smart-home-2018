@@ -1,7 +1,14 @@
-package ru.sbt.mipt.oop;
+package ru.sbt.mipt.oop.homeelement;
+
+import ru.sbt.mipt.oop.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+/**
+ * Хранит состояние дома - состояния всех дверей и лампочек в комнатах.
+ * метод-выключение всех лампочек.
+ */
 
 public class SmartHome {
 
