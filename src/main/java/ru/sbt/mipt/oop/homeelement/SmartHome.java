@@ -2,6 +2,8 @@ package ru.sbt.mipt.oop.homeelement;
 
 import ru.sbt.mipt.oop.*;
 
+import ru.sbt.mipt.oop.homeelement.alarm.SecurityAlarm;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -12,7 +14,8 @@ import java.util.Collection;
 
 public class SmartHome {
 
-    Collection<Room> rooms;
+    private Collection<Room> rooms;
+    private SecurityAlarm securityAlarm = new SecurityAlarm();
 
     public SmartHome() {
         rooms = new ArrayList<>();
@@ -22,12 +25,16 @@ public class SmartHome {
         this.rooms = rooms;
     }
 
-    public void addRoom(Room room) {
-        rooms.add(room);
+    public void setSecurityAlarm(SecurityAlarm securityAlarm) {
+        this.securityAlarm = securityAlarm;
     }
 
     public Collection<Room> getRooms() {
         return rooms;
+    }
+
+    public SecurityAlarm getSecurityAlarm(){
+        return securityAlarm;
     }
 
     public void turnOffLights() {
