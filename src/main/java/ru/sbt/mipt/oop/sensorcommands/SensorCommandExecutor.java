@@ -1,4 +1,6 @@
-package ru.sbt.mipt.oop;
+package ru.sbt.mipt.oop.sensorcommands;
+
+import ru.sbt.mipt.oop.sensorcommands.SensorCommand;
 
 public class SensorCommandExecutor {
 

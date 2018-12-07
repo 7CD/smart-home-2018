@@ -1,8 +1,9 @@
 package ru.sbt.mipt.oop.homeelement;
 
-import ru.sbt.mipt.oop.*;
-
 import ru.sbt.mipt.oop.homeelement.alarm.SecurityAlarm;
+import ru.sbt.mipt.oop.sensorcommands.CommandType;
+import ru.sbt.mipt.oop.sensorcommands.SensorCommand;
+import ru.sbt.mipt.oop.sensorcommands.SensorCommandExecutor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,7 +42,7 @@ public class SmartHome {
         for (Room homeRoom : getRooms()) {
             for (Light light : homeRoom.getLights()) {
                 light.turnOff();
-                SensorCommand command = new SensorCommand(CommandType.LIGHT_OFF, light.getId());
+                ru.sbt.mipt.oop.sensorcommands.SensorCommand command = new SensorCommand(CommandType.LIGHT_OFF, light.getId());
                 SensorCommandExecutor.executeCommand(command);
             }
         }

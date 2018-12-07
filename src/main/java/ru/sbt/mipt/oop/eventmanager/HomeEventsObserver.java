@@ -1,4 +1,4 @@
-package ru.sbt.mipt.oop;
+package ru.sbt.mipt.oop.eventmanager;
 
 import ru.sbt.mipt.oop.events.eventprocessor.EventProcessor;
 import ru.sbt.mipt.oop.events.sensoreventprovider.RandomSensorEventProvider;
@@ -15,7 +15,7 @@ import java.util.Collection;
  * закрепленных за ним наблюдателей типа EventProcessor.
  */
 
-public class HomeEventsObserver {
+public class HomeEventsObserver implements EventsManager {
 
     private SmartHome smartHome;
     private SensorEventProvider sensorEventProvider;
@@ -29,13 +29,15 @@ public class HomeEventsObserver {
     public HomeEventsObserver(SmartHome smartHome,
                               Class<? extends SensorEventProvider> eventProviderClass) throws Exception {
         this.smartHome = smartHome;
-        sensorEventProvider = eventProviderClass.getConstructor(SmartHome.class).newInstance(smartHome);
+            sensorEventProvider = eventProviderClass.getConstructor(SmartHome.class).newInstance(smartHome);
     }
 
+    @Override
     public void registerEventProcessor(EventProcessor eventProcessor) {
         eventProcessors.add(eventProcessor);
     }
 
+    @Override
     public void runEventsCycle() {
         SensorEvent event = sensorEventProvider.getNextSensorEvent();
         while (event != null) {
