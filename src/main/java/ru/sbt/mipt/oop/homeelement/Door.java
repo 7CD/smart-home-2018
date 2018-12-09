@@ -14,6 +14,10 @@ public class Door {
         return id;
     }
 
+    public boolean isOpen() {
+        return isOpen;
+    }
+
     public void open() { isOpen = true; }
 
     public void close() { isOpen = false; }

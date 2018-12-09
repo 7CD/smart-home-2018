@@ -29,7 +29,7 @@ public class HomeEventsObserver implements EventsManager {
     public HomeEventsObserver(SmartHome smartHome,
                               Class<? extends SensorEventProvider> eventProviderClass) throws Exception {
         this.smartHome = smartHome;
-            sensorEventProvider = eventProviderClass.getConstructor(SmartHome.class).newInstance(smartHome);
+        sensorEventProvider = eventProviderClass.getConstructor(SmartHome.class).newInstance(smartHome);
     }
 
     @Override

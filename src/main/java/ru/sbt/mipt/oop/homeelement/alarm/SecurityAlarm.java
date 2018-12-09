@@ -3,7 +3,7 @@ package ru.sbt.mipt.oop.homeelement.alarm;
 public class SecurityAlarm {
 
     private SecurityAlarmState securityAlarmState; // State pattern
-    String password;
+    private String password;
 
     public SecurityAlarm() {
         securityAlarmState = SecurityAlarmDeactivatedState.getInstance(this);
@@ -32,7 +32,6 @@ public class SecurityAlarm {
 
     public void deactivate(String password) {
         securityAlarmState.deactivate(password);
-
     }
 
     public void alert() {

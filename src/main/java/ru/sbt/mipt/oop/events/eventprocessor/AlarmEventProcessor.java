@@ -12,7 +12,7 @@ public class AlarmEventProcessor implements EventProcessor {
         if (!isAlarmEvent(event)) {
             if (smartHome.getSecurityAlarm().isActivated()) {
                 smartHome.getSecurityAlarm().alert();
-                System.out.print("Sending sms: Somebody is in the house: ");
+                System.out.print("Sending sms: Somebody is in the house. ");
             }
         } else if (event.getType() == ALARM_ACTIVATED) {
             smartHome.getSecurityAlarm().activate(null);
