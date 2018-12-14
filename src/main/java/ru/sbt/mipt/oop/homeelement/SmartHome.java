@@ -10,7 +10,7 @@ import java.util.Collection;
  * А также сигнализацию.
  */
 
-public class SmartHome {
+public class SmartHome implements HomeComponent {
 
     private Collection<Room> rooms;
     private SecurityAlarm securityAlarm = new SecurityAlarm();
@@ -33,5 +33,11 @@ public class SmartHome {
 
     public SecurityAlarm getSecurityAlarm(){
         return securityAlarm;
+    }
+
+    @Override
+    public void execute(HomeComponentAction action, HomeComponent parent) {
+        for (Room room : rooms)
+            room.execute(action, this);
     }
 }

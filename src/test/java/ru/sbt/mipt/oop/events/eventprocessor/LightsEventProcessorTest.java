@@ -1,8 +1,13 @@
 package ru.sbt.mipt.oop.events.eventprocessor;
 
 import ru.sbt.mipt.oop.events.sensorevents.SensorEvent;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static ru.sbt.mipt.oop.events.sensorevents.SensorEventType.*;
 import org.junit.Test;
+import ru.sbt.mipt.oop.homeelement.Light;
+import ru.sbt.mipt.oop.homeelement.Room;
+import java.util.NoSuchElementException;
 
 public class LightsEventProcessorTest extends EventProcessorTest {
 
@@ -12,23 +17,26 @@ public class LightsEventProcessorTest extends EventProcessorTest {
     }
 
     @Test
-    public void processNotLightsEventTest() {
-        SensorEvent notLightEvent = new SensorEvent(DOOR_CLOSED, "1");
-        String expected = "";
-        test(notLightEvent, expected);
-    }
-
-    @Test
     public void processLightOnTest() {
+        assertFalse(isLightOn("1"));
         SensorEvent lightOnEvent = new SensorEvent(LIGHT_ON, "1");
-        String expected = "Light 1 in room kitchen was turned on.\r\n";// or + System.lineSeparator();
-        test(lightOnEvent, expected);
+        eventProcessor.processEvent(smartHome, lightOnEvent);
+        assertTrue(isLightOn("1"));
     }
 
     @Test
     public void processLightOffTest() {
-        SensorEvent lightOffEvent = new SensorEvent(LIGHT_OFF, "1");
-        String expected = "Light 1 in room kitchen was turned off.\r\n";
-        test(lightOffEvent, expected);
+        assertTrue(isLightOn("2"));
+        SensorEvent lightOnEvent = new SensorEvent(LIGHT_OFF, "2");
+        eventProcessor.processEvent(smartHome, lightOnEvent);
+        assertFalse(isLightOn("1"));
+    }
+
+    private boolean isLightOn(String id) {
+        for (Room room : smartHome.getRooms())
+            for (Light light : room.getLights())
+                if (light.getId().equals(id))
+                    return light.isOn();
+        throw new NoSuchElementException();
     }
 }

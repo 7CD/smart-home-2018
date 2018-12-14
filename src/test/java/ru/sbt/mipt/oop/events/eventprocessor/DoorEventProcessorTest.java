@@ -1,8 +1,14 @@
 package ru.sbt.mipt.oop.events.eventprocessor;
 
 import ru.sbt.mipt.oop.events.sensorevents.SensorEvent;
+
+import static org.junit.Assert.*;
 import static ru.sbt.mipt.oop.events.sensorevents.SensorEventType.*;
 import org.junit.Test;
+import ru.sbt.mipt.oop.homeelement.Door;
+import ru.sbt.mipt.oop.homeelement.Room;
+
+import java.util.NoSuchElementException;
 
 public class DoorEventProcessorTest extends EventProcessorTest {
 
@@ -12,23 +18,26 @@ public class DoorEventProcessorTest extends EventProcessorTest {
     }
 
     @Test
-    public void processNotDoorEventTest() {
-        SensorEvent notDoorEvent = new SensorEvent(LIGHT_ON, "1");
-        String expected = "";
-        test(notDoorEvent, expected);
-    }
-
-    @Test
     public void processDoorOpenedTest() {
+        assertFalse(isDoorOpened("1"));
         SensorEvent doorOpenedEvent = new SensorEvent(DOOR_OPENED, "1");
-        String expected = "Door 1 in room kitchen was opened.\r\n";// or + System.lineSeparator();
-        test(doorOpenedEvent, expected);
+        eventProcessor.processEvent(smartHome, doorOpenedEvent);
+        assertTrue(isDoorOpened("1"));
     }
 
     @Test
     public void processDoorClosedTest() {
-        SensorEvent doorClosedEvent = new SensorEvent(DOOR_CLOSED, "1");
-        String expected = "Door 1 in room kitchen was closed.\r\n";
-        test(doorClosedEvent, expected);
+        assertTrue(isDoorOpened("3"));
+        SensorEvent doorOpenedEvent = new SensorEvent(DOOR_CLOSED, "3");
+        eventProcessor.processEvent(smartHome, doorOpenedEvent);
+        assertFalse(isDoorOpened("3"));
+    }
+
+    private boolean isDoorOpened(String id) {
+        for (Room room : smartHome.getRooms())
+            for (Door door : room.getDoors())
+                if (door.getId().equals(id))
+                    return door.isOpen();
+        throw new NoSuchElementException() ;
     }
 }

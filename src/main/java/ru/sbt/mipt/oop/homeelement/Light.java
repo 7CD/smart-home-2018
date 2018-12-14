@@ -1,6 +1,6 @@
 package ru.sbt.mipt.oop.homeelement;
 
-public class Light {
+public class Light implements HomeComponent {
 
     private boolean isOn;
     private final String id;
@@ -21,4 +21,10 @@ public class Light {
     public void turnOn() { isOn = true; }
 
     public void turnOff() { isOn = false; }
+
+
+    @Override
+    public void execute(HomeComponentAction action, HomeComponent room) {
+        action.execute(this, room);
+    }
 }

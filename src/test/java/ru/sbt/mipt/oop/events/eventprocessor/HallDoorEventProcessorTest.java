@@ -3,6 +3,9 @@ package ru.sbt.mipt.oop.events.eventprocessor;
 import ru.sbt.mipt.oop.events.sensorevents.SensorEvent;
 import static ru.sbt.mipt.oop.events.sensorevents.SensorEventType.*;
 import org.junit.Test;
+import ru.sbt.mipt.oop.homeelement.Light;
+import ru.sbt.mipt.oop.homeelement.Room;
+import static org.junit.Assert.assertTrue;
 
 public class HallDoorEventProcessorTest extends EventProcessorTest {
 
@@ -12,20 +15,17 @@ public class HallDoorEventProcessorTest extends EventProcessorTest {
     }
 
     @Test
-    public void processNotHallDoorEventTest() {
-        SensorEvent notDoorEvent = new SensorEvent(DOOR_OPENED, "1");
-        String expected = "";
-        test(notDoorEvent, expected);
-
-        notDoorEvent = new SensorEvent(DOOR_CLOSED, "1");
-        expected = "";
-        test(notDoorEvent, expected);
-    }
-
-    @Test
     public void processHallDoorClosedTest() {
         SensorEvent hallDoorClosedEvent = new SensorEvent(DOOR_CLOSED, "4");
-        String expected = "All the lights are turned off.\r\n";
-        test(hallDoorClosedEvent, expected);
+        eventProcessor.processEvent(smartHome, hallDoorClosedEvent);
+        assertTrue(isAllLightsOff());
+    }
+
+    private boolean isAllLightsOff() {
+        for (Room room : smartHome.getRooms())
+            for (Light light : room.getLights())
+                if (light.isOn())
+                    return false;
+        return true;
     }
 }

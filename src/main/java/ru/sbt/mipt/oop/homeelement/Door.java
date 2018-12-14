@@ -1,6 +1,6 @@
 package ru.sbt.mipt.oop.homeelement;
 
-public class Door {
+public class Door implements HomeComponent {
 
     private boolean isOpen;
     private final String id;
@@ -21,4 +21,9 @@ public class Door {
     public void open() { isOpen = true; }
 
     public void close() { isOpen = false; }
+
+    @Override
+    public void execute(HomeComponentAction action, HomeComponent room) {
+        action.execute(this, room);
+    }
 }

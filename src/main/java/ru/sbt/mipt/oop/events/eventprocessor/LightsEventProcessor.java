@@ -13,19 +13,23 @@ public class LightsEventProcessor implements EventProcessor {
     public void processEvent(SmartHome smartHome, SensorEvent event) {
         if (!isLightEvent(event)) return;
 
-        for (Room room : smartHome.getRooms()) {
-            for (Light light : room.getLights()) {
-                if (light.getId().equals(event.getObjectId())) {
-                    if (event.getType() == LIGHT_ON) {
-                        light.turnOn();
-                        System.out.println("Light " + light.getId() + " in room " + room.getName() + " was turned on.");
-                    } else {
-                        light.turnOff();
-                        System.out.println("Light " + light.getId() + " in room " + room.getName() + " was turned off.");
-                    }
-                }
+        smartHome.execute((homeComponent, homeComponentParent) -> {
+            if (!(homeComponent instanceof Light)) return;
+
+            Light light = (Light) homeComponent;
+
+            if (!light.getId().equals(event.getObjectId())) return;
+
+            Room room = (Room) homeComponentParent;
+
+            if (event.getType() == LIGHT_ON) {
+                light.turnOn();
+                System.out.println("Light " + light.getId() + " in room " + room.getName() + " was turned on.");
+            } else {
+                light.turnOff();
+                System.out.println("Light " + light.getId() + " in room " + room.getName() + " was turned off.");
             }
-        }
+        }, null);
     }
 
     private boolean isLightEvent(SensorEvent event) {
